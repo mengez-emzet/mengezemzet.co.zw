@@ -37,17 +37,22 @@
     const grid = $('#projectsGrid');
     if (!grid) return;
     const projects = category === 'all' ? projectsData : projectsData.filter(project => project.category === category);
+    
+    // Updated template: Wrapped in <a>, added real arrow button
     grid.innerHTML = projects.map((project, index) => `
-      <article class="project-item reveal" data-category="${project.category}">
-        <div class="project-img" style="background-image:url('${project.image}'), ${projectFallback(index)}" role="img" aria-label="${project.title} preview"></div>
+      <a href="#" class="project-item reveal view-more" data-category="${project.category}" data-id="${project.id}">
+        <div class="project-img" style="background-image:url('${project.image}'), ${projectFallback(index)}" role="img" aria-label="${project.title} preview">
+          <div class="project-arrow"><i class="fas fa-arrow-up-right-from-square"></i></div>
+        </div>
         <div class="project-info">
           <span class="project-category">${project.category === 'MQL5' ? 'Automation' : 'Web development'}</span>
           <h3>${project.title}</h3>
           <p>${project.description}</p>
           <div class="project-tech">${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}</div>
-          <a href="#" class="project-link view-more" data-id="${project.id}">View project details <i class="fas fa-arrow-right"></i></a>
+          <div class="project-link">View project details <i class="fas fa-arrow-right"></i></div>
         </div>
-      </article>`).join('');
+      </a>`).join('');
+      
     observeReveals(grid);
     $$('.view-more', grid).forEach(link => link.addEventListener('click', event => {
       event.preventDefault();
